@@ -1,13 +1,11 @@
 package fieldObjects
 
-import CELL_SIZE
+import FieldScene
 import Game
 import IntVector
-import java.awt.Color
 import java.awt.Graphics
 
-abstract class Consumable(val position : IntVector, private val action : (g : Game) -> Unit) {
-    fun consume(g : Game) = action(g)
+abstract class Consumable(val position : IntVector, val action: (scene : FieldScene) -> Unit) {
     abstract fun draw(g : Graphics)
     override operator fun equals(other: Any?): Boolean =
         if (other is Consumable)
@@ -20,24 +18,3 @@ abstract class Consumable(val position : IntVector, private val action : (g : Ga
     }
 }
 
-class Food(position: IntVector) : Consumable(position,
-    {g : Game -> g.snake.body.add(g.snake.body.last()) }
-) {
-    override fun draw(g: Graphics) {
-        val indent = 1
-        g.color = Color.GREEN
-        g.fillRect(position.x * CELL_SIZE + indent, position.y * CELL_SIZE + indent,
-            CELL_SIZE - 2 * indent, CELL_SIZE - 2 * indent)
-    }
-}
-
-class Wall(position: IntVector) : Consumable(position,
-    {g -> g.gameOver()}
-) {
-    override fun draw(g: Graphics) {
-        val indent = 1
-        g.color = Color.DARK_GRAY
-        g.fillRect(position.x * CELL_SIZE + indent, position.y * CELL_SIZE + indent,
-            CELL_SIZE - 2 * indent, CELL_SIZE - 2 * indent)
-    }
-}

@@ -3,8 +3,7 @@ import java.awt.Graphics
 import java.awt.event.KeyAdapter
 import java.awt.event.KeyEvent
 
-class Snake(game : Game, startPos: IntVector = IntVector(0,0)) {
-    private val mGame = game
+class Snake(private val mScene: FieldScene, startPos: IntVector = IntVector(0,0)) {
     var headPos = startPos
 
     val body = mutableListOf<IntVector>(
@@ -18,22 +17,21 @@ class Snake(game : Game, startPos: IntVector = IntVector(0,0)) {
         // Updating head
         val movement = getDirVector(direction)
         headPos += movement
-        headPos = mGame.field.cycleAcrossBoundary(headPos)
+        headPos = mScene.field.cycleAcrossBoundary(headPos)
         //Collision
         if (headPos in body) {
-            mGame.gameOver()
+            GameWindow.game.gameOver()
         }
         // Updating body parts
-        val tail = body.last()
         body.removeLast()
         body.add(0, headPos)
 
         // Eating consumables
-        if (mGame.field.isConsumable(headPos)) {
-            val consumable = mGame.field.getConsumable(headPos)!!
-            consumable.consume(mGame)
+        if (mScene.field.isConsumable(headPos)) {
+            val consumable = mScene.field.getConsumable(headPos)!!
+            consumable.action(mScene)
             println(consumable)
-            mGame.field.removeConsumable(consumable)
+            mScene.field.removeConsumable(consumable)
         }
     }
 

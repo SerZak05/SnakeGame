@@ -9,16 +9,18 @@ import kotlin.time.measureTime
 class Game : JPanel() {
     val WINDOW_WIDTH = 600
     val WINDOW_HEIGHT = 600
-    val snake = Snake(this, IntVector(5, 5))
 
     init {
         preferredSize = Dimension(WINDOW_WIDTH, WINDOW_HEIGHT)
-        addKeyListener(snake.keyListener)
     }
 
-    val FIELD_WIDTH = 10
-    val FIELD_HEIGHT = 10
-    val field = Field(FIELD_WIDTH, FIELD_HEIGHT)
+    private var currScene : Scene? = null
+
+    fun changeScene(scene : Scene) {
+        GameWindow.addKeyListener(scene.keyListener)
+        GameWindow.addMouseListener(scene.mouseListener)
+        currScene = scene
+    }
 
     private var accumulatedTime = 0.0
     private val tickTime = 0.5 // in seconds
@@ -28,8 +30,7 @@ class Game : JPanel() {
         accumulatedTime -= tickTime
 
         if (isRunning) {
-            field.update()
-            snake.update()
+            currScene?.update()
         }
     }
 
@@ -39,8 +40,7 @@ class Game : JPanel() {
 
     override fun paintComponent(g: Graphics) {
         super.paintComponent(g)
-        field.draw(g)
-        snake.draw(g)
+        currScene?.draw(g)
     }
 
     private var isRunning = true

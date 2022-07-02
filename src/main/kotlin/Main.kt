@@ -1,8 +1,8 @@
 fun main() {
     println("Starting...")
-    val gameWindow = GameWindow(Game())
-    gameWindow.isVisible = true
+    GameWindow.isVisible = true
+    GameWindow.game.changeScene(FieldScene())
     while (true) {
-        gameWindow.game.loop()
+        GameWindow.game.loop()
     }
 }

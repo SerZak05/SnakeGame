@@ -1,9 +1,9 @@
 import javax.swing.JFrame
 
-class GameWindow(val game: Game) : JFrame() {
+object GameWindow : JFrame() {
+    val game = Game()
     init {
         add(game)
-        addKeyListener(game.snake.keyListener)
         isResizable = false
         pack()
         title = "Snaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaake"
